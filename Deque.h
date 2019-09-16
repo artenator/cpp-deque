@@ -1,5 +1,4 @@
 #include <stddef.h>
-#include <iterator>
 #include <memory>
 
 #ifndef DEQUE_H
