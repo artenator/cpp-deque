@@ -78,7 +78,7 @@ public:
   }
 
   void popBack() {
-    if (this->end == NULL) {
+    if (this->end == nullptr) {
       return;
     }
     else if (this->end == this->front) {
