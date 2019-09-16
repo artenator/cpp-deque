@@ -7,16 +7,18 @@
 template <class T>
 class Node {
 public:
-  T *value;
+  T value;
   Node<T> *next;
   Node<T> *prev;
   
-  Node() {
-    this->value = NULL;
-  }
+  Node() {}
   
   Node(T value) {
-    this->value = &value;
+    this->value = value;
+  }
+
+  ~Node() {
+    std::cout << "Freed memory for Node with value: " << this->value << std::endl;
   }
 };
 
@@ -27,98 +29,110 @@ public:
   Node<T> *end;
   int size;
 
-  Deque(int size) {
-    this->size = size;
-    Node<T> *prev = new Node<T>();
-    Node<T> *cur;
+  Deque() {
+    this->size = 0;
+  }
 
-    this->front = prev;
+  T pushBack(T value) {
+    Node<T> *newNode = new Node<T>(value);
     
-    for (int i = 0; i < size - 1; i++) {
-      cur = new Node<T>();
-      prev->next = cur;
-      cur->prev = prev;
-      prev = cur;
-    }
-
-    cur->next = this->front;
-    this->front->prev = cur;
-
-    this->end = this->front;
-  }
-
-  T *pushBack(T *value) {
-    if (!(this->end->next == this->front)) {
-      if (this->end->value) {
-        this->end = this->end->next;
-      }
-
-      this->end->value = value;
-      return value;
+    if (!this->front && !this->end) {
+      newNode->next = newNode;
+      newNode->prev = newNode;
+      
+      this->front = newNode;
+      this->end = newNode;
     } else {
-      return NULL;
+      this->end->next = newNode;
+      newNode->prev = this->end;
+      newNode->next = this->front;
+      this->end = newNode;
+      this->front->prev = newNode;
     }
+
+    size++;
+
+    return value;
   }
 
-  T *pushFront(T *value) {
-    if (!(this->front->prev == this->end)) {
-      if (this->front->value) {
-        this->front = this->front->prev;
-      }
+  T pushFront(T value) {
+    Node<T> *newNode = new Node<T>(value);
+    
+    if (!this->front && !this->end) {
+      newNode->next = newNode;
+      newNode->prev = newNode;
 
-      this->front->value = value;
-      return value;
+      this->front = newNode;
+      this->end = newNode;
     } else {
-      return NULL;
+      this->front->prev = newNode;
+      newNode->next = this->front;
+      newNode->prev = this->end;
+      this->front = newNode;
+      this->end->next = newNode;
     }
+
+    size++;
+
+    return value;
   }
 
-  T *popBack() {
-    T *ret;
-    if (this->front != this->end) {
-      ret = this->end->value;
-      this->end->value = NULL;
+  void popBack() {
+    if (this->end == NULL) {
+      return;
+    }
+    else if (this->end == this->front) {
+      delete this->end;
+      this->end = NULL;
+      this->front = NULL;
+    } else {
+      Node<int> *tmp = this->end;
       this->end = this->end->prev;
-      return ret;
-    } else if (this->end) {
-      ret = this->end->value;
-      this->end->value = NULL;
-      return ret;
-    } else {
-      return NULL;
+      this->end->next = tmp->next;
+      this->front->prev = this->end;
+      delete tmp;
     }
-    return NULL;
+
+    std::cout << "addr for front is " << this->front << std::endl;
+    std::cout << "addr for end is " << this->end << std::endl;
+
+    size--;
+    
+    std::cout << "size is " << this->size << std::endl;
   }
 
-  T *popFront() {
-    T *ret;
-    if (this->front != this->end) {
-      ret = this->end->value;
-      this->front->value = NULL;
-      this->front = this->front->next;
-      return ret;
-    } else if (this->front) {
-      ret = this->front->value;
-      this->front->value = NULL;
-      return ret;
-    } else {
-      return NULL;
+  void popFront() {
+    if (this->front == NULL) {
+      return;
     }
-    return NULL;
+    else if (this->end == this->front) {
+      delete this->front;
+      this->end = NULL;
+      this->front = NULL;
+    } else {
+      Node<int> *tmp = this->front;
+      this->front = this->front->next;
+      this->front->prev = tmp->prev;
+      this->end->next = this->front;
+      delete tmp;
+    }
+
+    std::cout << "addr for front is " << this->front << std::endl;
+    std::cout << "addr for end is " << this->end << std::endl;
+
+    size--;
+    
+    std::cout << "size is " << this->size << std::endl;
   }
 
   void print() {
     Node<int> *cur = this->front;
     
     for (int i = 0; i < this->size; i++) {
-      if (cur->value == NULL) {
-        std::cout << "NULL";
-      } else {
-        std::cout << *cur->value;
-      }
+      std::cout << cur->value;
       
       if (!(i == this->size - 1))
-          std::cout << "->";
+        std::cout << "->";
       
       cur = cur->next;
     }

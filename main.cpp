@@ -3,40 +3,34 @@
 #include "Deque.h"
 
 int main() {
-  Deque<int> *d = new Deque<int>(4);
+  Deque<int> d = Deque<int>();
 
+  std::cout << d.pushBack(5) << std::endl;
+  std::cout << d.pushBack(10) << std::endl;
+  std::cout << d.pushFront(30) << std::endl;
+  std::cout << d.pushBack(22) << std::endl;
 
-  int *x = new int(5);
-  int *y = new int(10);
-  int *z = new int(23);
-  int *a = new int(7);
-  int *b = new int(50);
+  d.print();
   
-  std::cout << *d->pushBack(x) << std::endl;
-  std::cout << *d->pushBack(y) << std::endl;
-  std::cout << *d->pushFront(z) << std::endl;
-  std::cout << *d->pushBack(a) << std::endl;
+  std::cout << "Popping back " << d.end->value << std::endl;
+  d.popBack();
+  d.print();
 
-  d->print();
+  std::cout << "Popping front " << d.front->value << std::endl;
+  d.popFront();
+  d.print();
 
-  d->popFront();
-  d->print();
-  
-  d->popBack();
-  d->popBack();
+  std::cout << "Popping back " << d.end->value << std::endl;
+  d.popBack();
+  d.print();
 
-  d->print();
+  std::cout << "Popping front " << d.front->value << std::endl;
+  d.popFront();
+  d.print();
 
-  d->popFront();
-
-  d->print();
-
-  std::cout << *d->pushBack(y) << std::endl;
-  std::cout << *d->pushBack(x) << std::endl;
-  std::cout << *d->pushFront(z) << std::endl;
-  std::cout << *d->pushBack(b) << std::endl;
-
-  d->print();
+  std::cout << "Popping front when empty " << d.front << std::endl;
+  d.popFront();
+  d.print();
 
   return 0;
 }
