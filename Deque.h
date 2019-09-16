@@ -82,6 +82,7 @@ public:
       return;
     }
     else if (this->end == this->front) {
+      this->end->next = nullptr;
       this->end = nullptr;
       this->front = nullptr;
     } else {
@@ -99,6 +100,7 @@ public:
       return;
     }
     else if (this->end == this->front) {
+      this->front->next = nullptr;
       this->end = nullptr;
       this->front = nullptr;
     } else {
