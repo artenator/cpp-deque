@@ -91,12 +91,7 @@ public:
       this->front->prev = this->end;
     }
 
-    std::cout << "addr for front is " << this->front << std::endl;
-    std::cout << "addr for end is " << this->end << std::endl;
-
     size--;
-    
-    std::cout << "size is " << this->size << std::endl;
   }
 
   void popFront() {
@@ -113,12 +108,7 @@ public:
       this->end->next = this->front;
     }
 
-    std::cout << "addr for front is " << this->front << std::endl;
-    std::cout << "addr for end is " << this->end << std::endl;
-
     size--;
-    
-    std::cout << "size is " << this->size << std::endl;
   }
 
   void print() {
