@@ -11,26 +11,14 @@ int main() {
   std::cout << d.pushBack(22) << std::endl;
 
   d.print();
+
+  std::cout << d.front << std::endl;
+  d.popBack();
+  d.print();
+
+  std::cout << d.end << std::endl;
+  d.popFront();
+  d.print();
   
-  std::cout << "Popping back " << d.end->value << std::endl;
-  d.popBack();
-  d.print();
-
-  std::cout << "Popping front " << d.front->value << std::endl;
-  d.popFront();
-  d.print();
-
-  std::cout << "Popping back " << d.end->value << std::endl;
-  d.popBack();
-  d.print();
-
-  std::cout << "Popping front " << d.front->value << std::endl;
-  d.popFront();
-  d.print();
-
-  std::cout << "Popping front when empty " << d.front << std::endl;
-  d.popFront();
-  d.print();
-
   return 0;
 }

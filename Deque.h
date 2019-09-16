@@ -1,5 +1,6 @@
 #include <stddef.h>
 #include <iterator>
+#include <memory>
 
 #ifndef DEQUE_H
 #define DEQUE_H
@@ -8,8 +9,8 @@ template <class T>
 class Node {
 public:
   T value;
-  Node<T> *next;
-  Node<T> *prev;
+  std::shared_ptr< Node<T> > next;
+  std::weak_ptr< Node<T> > prev;
   
   Node() {}
   
@@ -25,8 +26,8 @@ public:
 template <class T>
 class Deque {
 public:
-  Node<T> *front;
-  Node<T> *end;
+  std::shared_ptr< Node<T> > front;
+  std::shared_ptr< Node<T> > end;
   int size;
 
   Deque() {
@@ -34,8 +35,8 @@ public:
   }
 
   T pushBack(T value) {
-    Node<T> *newNode = new Node<T>(value);
-    
+    std::shared_ptr< Node<T> > newNode = std::make_shared< Node<T> >(value);
+
     if (!this->front && !this->end) {
       newNode->next = newNode;
       newNode->prev = newNode;
@@ -56,8 +57,8 @@ public:
   }
 
   T pushFront(T value) {
-    Node<T> *newNode = new Node<T>(value);
-    
+    std::shared_ptr< Node<T> > newNode = std::make_shared< Node<T> >(value);
+
     if (!this->front && !this->end) {
       newNode->next = newNode;
       newNode->prev = newNode;
@@ -82,15 +83,13 @@ public:
       return;
     }
     else if (this->end == this->front) {
-      delete this->end;
-      this->end = NULL;
-      this->front = NULL;
+      this->end = nullptr;
+      this->front = nullptr;
     } else {
-      Node<int> *tmp = this->end;
-      this->end = this->end->prev;
+      std::shared_ptr< Node<int> > tmp = this->end;
+      this->end = this->end->prev.lock();
       this->end->next = tmp->next;
       this->front->prev = this->end;
-      delete tmp;
     }
 
     std::cout << "addr for front is " << this->front << std::endl;
@@ -102,19 +101,17 @@ public:
   }
 
   void popFront() {
-    if (this->front == NULL) {
+    if (this->front == nullptr) {
       return;
     }
     else if (this->end == this->front) {
-      delete this->front;
-      this->end = NULL;
-      this->front = NULL;
+      this->end = nullptr;
+      this->front = nullptr;
     } else {
-      Node<int> *tmp = this->front;
+      std::shared_ptr< Node<int> > tmp = this->front;
       this->front = this->front->next;
       this->front->prev = tmp->prev;
       this->end->next = this->front;
-      delete tmp;
     }
 
     std::cout << "addr for front is " << this->front << std::endl;
@@ -126,7 +123,7 @@ public:
   }
 
   void print() {
-    Node<int> *cur = this->front;
+    std::shared_ptr< Node<int> > cur = this->front;
     
     for (int i = 0; i < this->size; i++) {
       std::cout << cur->value;
@@ -142,6 +139,12 @@ public:
 
   bool empty() {
     return this->size <= 0;
+  }
+
+  ~Deque() {
+    std::cout << "destruct deque" << std::endl;
+    if (this->front)
+      this->front->next = nullptr;
   }
 };
 
