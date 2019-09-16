@@ -139,6 +139,10 @@ public:
 
     std::cout << std::endl;
   }
+
+  bool empty() {
+    return this->size <= 0;
+  }
 };
 
 #endif
